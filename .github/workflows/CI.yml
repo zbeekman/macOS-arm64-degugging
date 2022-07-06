@@ -94,7 +94,7 @@ jobs:
 
       - name: install-mambaforge
         run: |
-          case uname -m in
+          case "$(uname -m)" in
             x86_64)
               export MINIFORGE_FILE="Mambaforge-4.12.0-2-MacOSX-x86_64.sh"
               export MINIFORGE_SHA256="562c2bcbabff10387f130acea72b960454fa3d90b593126e4e4febcf6da763d3"
