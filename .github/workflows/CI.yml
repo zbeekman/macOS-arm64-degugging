@@ -91,3 +91,32 @@ jobs:
           cd "${HOME}"
           type -a python
           while read -r line ; do "${line##* is }" --version; done <<< $(type -a python)
+
+      - name: install-mambaforge
+        run: |
+          case uname -m in
+            x86_64)
+              export MINIFORGE_FILE="Mambaforge-4.12.0-2-MacOSX-x86_64.sh"
+              export MINIFORGE_SHA256="562c2bcbabff10387f130acea72b960454fa3d90b593126e4e4febcf6da763d3"
+              export ARCH="x86_64"
+              export TARGET_PLATFORM="osx-64"
+              ;;
+            arm64)
+              export MINIFORGE_FILE="Mambaforge-4.12.0-2-MacOSX-arm64.sh"
+              export MINIFORGE_SHA256="2e2be9d976da31b62ab314881d3c6ed3f65c76e3ea69cc4b59fb344780109026"
+              export ARCH="arm64"
+              export TARGET_PLATFORM="osx-arm64"
+              ;;
+            *)
+              echo "Unknow architecture!"
+              exit 1
+              ;;
+          esac
+          curl -L -s "${MINIFORGE_URL}/${MINIFORGE_VERSION}/${MINIFORGE_FILE}" > "${MINIFORGE_FILE}"
+          echo "${MINIFORGE_SHA256} *${MINIFORGE_FILE}" | tee "${MINIFORGE_FILE}.sha256"
+          shasum -c ./"${MINIFORGE_FILE}.sha256"
+          bash "${MINIFORGE_FILE}" -b -p ~/conda
+          source ~/conda/bin/activate root
+          conda install -y coreutils "constructor>=3.3.1" jinja2 curl libarchive -c conda-forge --override-channels
+          conda list
+          which constructor
