@@ -82,7 +82,7 @@ jobs:
 
       - name: test
         run: |
-          make INSTALLDIR="${INSTALLDIR}" check_python
+          make INSTALLDIR="${INSTALLDIR}" python_check
           echo "${INSTALLDIR}/conda/bin" >> $GITHUB_PATH
           export PATH="${INSTALLDIR}/conda/bin:${PATH}"
           which python
